@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Assessment Corrections · Y7 Python</title>
+<style>
+/* Layout: Eltham workbook frame (navy band header, white section cards), same house style as the
+   Y9 C# corrections page. One card per assessment question. */
+:root{
+  --navy9:#0A1B2E;--navy7:#163351;--navy5:#2A5A8C;--navy1:#D7E3EF;
+  --gold5:#C89B3C;--gold3:#E3C783;--gold7:#8A6520;
+  --paper:#F7F8FA;--card:#FFFFFF;--ink:#1A1D21;--muted:#555D68;--line:#E3E8EF;--frame:#B9C3CF;
+  --ok:#1F7A4D;--okbg:#E6F4EC;--bad:#B3261E;--badbg:#FCE9E7;--warn:#8A5A00;--warnbg:#FDF1D9;
+  --code-bg:#0E2033;--code-fg:#E4EAF1;--code-dim:#5E7389;--code-kw:#6FB3F2;--code-str:#E8A17A;--code-num:#B5CEA8;--code-fn:#E7DB9B;
+  --display:Georgia,"Times New Roman",serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font:16px/1.45 var(--body)}
+h1,h2,h3{font-family:var(--display);color:var(--navy9);font-weight:400;margin:0;text-wrap:balance}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+header.top{background:var(--navy9);color:#fff;margin-bottom:22px}
+header.top .wrap{padding-block:22px 26px}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold3)}
+header.top h1{color:#fff;font-size:clamp(30px,5vw,44px);margin:6px 0 10px}
+header.top p{color:var(--navy1);margin:0;max-width:760px}
+.idrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;align-items:flex-end}
+.idrow label{display:flex;flex-direction:column;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--gold3)}
+.idrow input{margin-top:4px;padding:8px 10px;border-radius:8px;border:1px solid var(--navy5);background:var(--navy7);color:#fff;font:inherit;min-width:200px}
+.teacherbar{margin-top:14px;display:none;gap:10px;flex-wrap:wrap;align-items:center;background:var(--navy7);border:1px dashed var(--gold5);border-radius:10px;padding:8px 12px;color:var(--gold3);font-size:14px}
+body.teacher .teacherbar{display:flex}
+
+/* jump bar */
+.jump{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:22px}
+.jump p{margin:0 0 12px;color:var(--muted);font-size:15px;max-width:75ch}
+.jumphead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.jumphead h2{font-size:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-weight:700;font-size:14px;min-width:46px;text-align:center;text-decoration:none;padding:7px 10px;border-radius:999px;border:1.5px solid var(--frame);background:#fff;color:var(--navy9)}
+.chip:hover,.chip:focus-visible{border-color:var(--navy5);outline:none;box-shadow:0 0 0 3px var(--gold3)}
+.chip.done{background:var(--okbg);border-color:#BFE0CC;color:var(--ok)}
+.chip.done::after{content:" ✓"}
+
+h2.group{font-size:26px;margin:30px 0 4px}
+p.groupnote{color:var(--muted);margin:0 0 14px;max-width:75ch}
+
+section.act{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 22px;margin-bottom:14px;scroll-margin-top:12px}
+section.act>header{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+section.act>header h2{font-size:24px;margin-right:6px}
+section.act>header h2 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+section.act>header h2 button::before{content:"▸";color:var(--gold5);display:inline-block;margin-right:8px;transition:transform .15s}
+section.act:not(.shut)>header h2 button::before{transform:rotate(90deg)}
+section.act>header h2 button:focus-visible{outline:3px solid var(--gold3);outline-offset:3px;border-radius:4px}
+section.act.shut .secbody{display:none}
+.secbody{margin-top:12px}
+.num{display:inline-block;min-width:34px;height:30px;padding:0 6px;border-radius:15px;background:var(--gold5);color:var(--navy9);text-align:center;line-height:30px;font-weight:700;font-size:15px}
+.pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:var(--gold5);color:var(--navy9)}
+.pill.navy{background:var(--navy9);color:var(--gold3)}
+.pill.model{background:#E3EEFB;color:#2F6FD6}
+.pill.must{background:var(--bad);color:#fff}
+.badge{margin-left:auto;font-size:13px;font-weight:700;color:var(--muted)}
+.badge.done{color:var(--ok)}
+.howto{color:var(--muted);font-size:15px;margin:0 0 14px;max-width:72ch}
+.howto b{color:var(--ink)}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.rules span{font-size:13px;background:var(--warnbg);color:var(--warn);border-radius:8px;padding:5px 10px;font-weight:600}
+code{font-family:var(--mono)}
+.howto code,.task code,.does code,.fb code,.hintbox code,.why code,.answer code,.qtext code,.eg code,.jump code,.groupnote code{font-family:var(--mono);font-size:.92em;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:0 4px;color:var(--navy7)}
+
+/* question text + example output */
+.qtext{margin:0 0 10px;max-width:72ch}
+.qtext ul{margin:6px 0 0;padding-left:22px}
+.twocol{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px;margin-bottom:14px}
+@media (max-width:720px){.twocol{grid-template-columns:1fr}}
+.eg h3,.sub{font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--gold7);text-transform:uppercase;margin:0 0 6px}
+.eg h3:not(:first-child){margin-top:10px}
+.console{font-family:var(--mono);font-size:14px;background:var(--code-bg);color:#E4EAF1;border-radius:8px;padding:8px 12px;white-space:pre;overflow-x:auto;line-height:1.5}
+.console .in{color:#7FD49B}
+.eg .cap{font-size:13px;color:var(--muted);margin:6px 0 0}
+
+/* build rows */
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--card);transition:background .15s,border-color .15s}
+.row .ln{width:30px;height:30px;border-radius:15px;background:var(--navy9);color:var(--gold3);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+.row .main{min-width:0;display:flex;flex-direction:column;gap:6px}
+.row .task{font-weight:600;color:var(--navy9)}
+.row .does{font-size:14.5px;color:var(--muted)}
+.row .does b{color:var(--gold7);font-size:12px;letter-spacing:.08em;margin-right:4px}
+.entry{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.indent{font-family:var(--mono);color:var(--frame);font-size:14px;white-space:pre;user-select:none}
+.entry input{flex:1 1 280px;min-width:0;font-family:var(--mono);font-size:15px;padding:8px 10px;border-radius:8px;border:1.5px solid var(--frame);background:#FBFCFD;color:var(--ink)}
+.entry input:focus{outline:3px solid var(--gold3);outline-offset:1px;border-color:var(--navy5)}
+.entry input:disabled{background:var(--paper);color:var(--muted)}
+.row.right{background:var(--okbg);border-color:#BFE0CC}
+.row.right input{border-color:var(--ok);background:#fff}
+.row.wrong{background:var(--badbg);border-color:#F2C2BD}
+.row.wrong input{border-color:var(--bad)}
+.row.waiting{opacity:.55}
+.row.given{background:var(--paper);padding:6px 12px}
+.row.given .ln{background:var(--frame);color:#fff;width:24px;height:24px;font-size:12px;margin-left:3px}
+.givencode{font-family:var(--mono);font-size:14px;color:var(--navy7);white-space:pre;overflow-x:auto}
+.row.bug:not(.right){border-color:#F2C2BD;border-width:2px}
+.bugline{font-family:var(--mono);font-size:14px;color:var(--bad);background:var(--badbg);border-radius:6px;padding:5px 9px;white-space:pre;overflow-x:auto;align-self:flex-start;max-width:100%}
+.buglabel{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--bad);text-transform:uppercase}
+.why{font-size:15px;background:var(--warnbg);color:#5C3D00;border-radius:8px;padding:8px 10px}
+.why b{color:var(--warn)}
+button.btn{font:inherit;font-weight:700;font-size:14px;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--navy9);background:var(--navy9);color:#fff}
+button.btn.ghost{background:#fff;color:var(--navy9)}
+button.btn.gold{background:var(--gold5);border-color:var(--gold5);color:var(--navy9)}
+button.btn.model{display:none;background:#E3EEFB;border-color:#2F6FD6;color:#2F6FD6}
+body.teacher button.btn.model{display:inline-block}
+button.btn:disabled{opacity:.45;cursor:default}
+button.btn:focus-visible{outline:3px solid var(--gold3);outline-offset:2px}
+.fb{font-size:15px;font-weight:600}
+.fb.good{color:var(--ok)}
+.fb.bad{color:var(--bad)}
+.hintbox{font-size:14px;color:var(--warn);background:var(--warnbg);border-radius:8px;padding:6px 10px}
+
+/* assembled program */
+.prog{margin-top:18px}
+.proghead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.proghead h3{font-size:20px}
+.legend{font-size:13px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.legend i{font-style:normal;font-family:var(--mono);font-weight:700}
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:12px;padding:14px 0;overflow-x:auto;font-family:var(--mono);font-size:14.5px;line-height:1.6}
+.code.small{font-size:14px;padding:10px 0;margin-bottom:12px}
+.code .cl{display:flex;white-space:pre;padding:0 16px;min-width:max-content}
+.code .cl .g{color:var(--code-dim);width:2.5em;text-align:right;margin-right:1.2em;flex:none;user-select:none}
+.code .cl.cur{background:rgba(200,155,60,.18);box-shadow:inset 4px 0 0 var(--gold5)}
+.code .cl.bugl{background:rgba(255,120,110,.16);box-shadow:inset 4px 0 0 #FF8A80}
+.code .ph,.code .c{color:var(--code-dim);font-style:italic}
+.code .k{color:var(--code-kw)}.code .s{color:var(--code-str)}.code .n{color:var(--code-num)}.code .f{color:var(--code-fn)}
+.donebar{display:none;margin-top:14px;background:var(--navy9);color:#fff;border-radius:12px;padding:14px 16px;gap:12px;flex-wrap:wrap;align-items:center}
+.donebar.on{display:flex}
+.donebar p{margin:0;color:var(--navy1);flex:1 1 260px}
+.donebar strong{color:var(--gold3)}
+
+/* multiple choice */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:0 0 12px}
+.opt{display:flex;gap:10px;align-items:center;font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff;color:var(--ink)}
+.opt b{flex:none;width:26px;height:26px;border-radius:13px;background:var(--navy9);color:var(--gold3);display:flex;align-items:center;justify-content:center;font-size:13px}
+.opt code{font-size:15px}
+.opt.correct{background:var(--okbg);border-color:var(--ok)}
+.opt.correct b{background:var(--ok);color:#fff}
+button.opt{cursor:pointer;border-color:var(--frame)}
+button.opt:hover,button.opt:focus-visible{border-color:var(--navy5);outline:none;box-shadow:0 0 0 3px var(--gold3)}
+button.opt.wrongpick{background:var(--badbg);border-color:var(--bad)}
+button.opt.wrongpick b{background:var(--bad);color:#fff}
+button.opt:disabled{cursor:default;box-shadow:none}
+.answer{border:1px solid #BFE0CC;background:var(--okbg);border-radius:10px;padding:12px 14px;margin-bottom:6px}
+.answer .ans{font-family:var(--display);font-size:22px;color:var(--ok);margin:0 0 6px}
+.answer p{margin:0 0 8px;max-width:72ch}
+.answer p:last-child{margin-bottom:0}
+.answer ol,.answer ul{margin:0 0 8px;padding-left:22px}
+.answer .slip{color:#5C3D00;background:var(--warnbg);border-radius:8px;padding:6px 10px}
+.answer .enter{font-size:14px;color:var(--muted)}
+.tryq{border:2px dashed var(--frame);border-radius:12px;padding:14px;margin-top:14px;background:var(--paper)}
+.tryq h3{font-size:20px;margin-bottom:6px}
+.tryq .qtext{margin-bottom:10px}
+
+.status{font-size:13px;color:var(--muted);margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+@media (max-width:640px){
+  section.act{padding:14px 12px}
+  section.act>header h2{font-size:21px}
+  .row{grid-template-columns:28px minmax(0,1fr);padding:8px}
+  .row .ln{width:26px;height:26px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+.pdfnote{font-size:13px;color:var(--navy1);align-self:center;max-width:30ch}
+.printmeta,.printval{display:none}
+/* Export to PDF = the browser's print window with this layout. Only the questions a student has
+   opened or started are included (everything, if nothing has been started or in teacher mode). */
+@page{margin:12mm}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:13px}
+  .wrap{max-width:none;padding:0}
+  header.top{margin-bottom:12px}
+  header.top .wrap{padding:14px 16px}
+  header.top h1{font-size:28px;margin:4px 0 6px}
+  header.top p,.jump,.rules,.status,.teacherbar,button.btn,.pdfnote,.noprint{display:none!important}
+  .printmeta{display:block;color:var(--gold3);font-weight:700;font-size:13px;margin-top:10px}
+  .idrow{margin-top:8px}
+  h2.group{font-size:20px;margin:16px 0 2px;break-after:avoid}
+  p.groupnote{margin-bottom:8px;break-after:avoid}
+  section.act{padding:10px 14px;margin-bottom:10px;border-color:var(--frame)}
+  section.act.shut .secbody{display:block}
+  section.act>header{break-after:avoid}
+  section.act>header h2{font-size:19px}
+  section.act>header h2 button::before{display:none}
+  .row,.answer,.tryq,.twocol,.donebar,.why,.opts{break-inside:avoid}
+  .row.waiting{opacity:1}
+  .entry input{display:none}
+  .printval{display:block;flex:1 1 100%;min-height:34px;font-family:var(--mono);font-size:13px;padding:7px 10px;border-radius:8px;border:1.5px solid var(--frame);background:#fff;white-space:pre-wrap;overflow-wrap:anywhere}
+  .row.right .printval{border-color:var(--ok)}
+  .row.wrong .printval{border-color:var(--bad)}
+  .code{overflow:visible;font-size:12.5px}
+  .code .cl{min-width:0}
+  .code .cl .src,.givencode,.bugline,.console{white-space:pre-wrap;overflow-wrap:anywhere;overflow:visible}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="kicker">Year 7 · Computer Science · Python · Michaelmas 2 assessment</div>
+  <h1>Assessment Corrections</h1>
+  <p>Use this page to correct every question you lost marks on. <b>Section A</b> tells you the answer, explains it, then gives you a new question to prove you have got it. <b>Section B</b> shows you which line is wrong and why. <b>Section C</b> builds the program one line at a time.</p>
+  <div class="idrow">
+    <label>NAME<input id="who" type="text" autocomplete="off" placeholder="First name and surname"></label>
+    <label>CLASS<input id="cls" type="text" autocomplete="off" placeholder="7A"></label>
+    <button class="btn gold" type="button" data-pdf>Export to PDF</button>
+    <span class="pdfnote">Saves the questions you have worked on. In the print window choose <b>Save as PDF</b>.</span>
+  </div>
+  <div class="printmeta" id="printmeta"></div>
+  <div class="teacherbar" id="teacherbar">Teacher mode: use ▶ Model on any line to type it live. <button class="btn gold" type="button" data-all="open">Open all</button> <button class="btn ghost" type="button" data-all="shut">Close all</button></div>
+</div></header>
+
+<main class="wrap" id="app">
+  <nav class="jump" aria-label="Questions">
+    <div class="jumphead"><h2>Which questions do you need to correct?</h2><span class="badge" id="overall"></span></div>
+    <p>Look at your marks on CodeBash. Click each question where you did not get full marks. A question turns green here when your correction is finished.</p>
+    <div class="chips" id="chips"></div>
+  </nav>
+</main>
+
+<script>
+/* ============================================================ helpers */
+const KW = new Set("if elif else and or not True False".split(" "));
+const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const KEY = "y7-michaelmas2-corrections-v1";
+let S; try { S = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { S = {}; }
+S.ans = S.ans || {}; S.tries = S.tries || {}; S.mc = S.mc || {}; S.open = S.open || {};
+let saveT; function save(){ clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }, 150); }
+const TEACHER = /(^|[#?&])teacher\b/.test(location.hash + location.search);
+if (TEACHER) document.body.classList.add("teacher");
+
+/* ============================================================ tokeniser (Python) */
+const OPS = ["==","!=","<=",">=","+=","-=","*=","/=","//","**"];
+function tokens(src){
+  const out = []; let i = 0;
+  while (i < src.length){
+    const c = src[i];
+    if (/\s/.test(c)){ i++; continue; }
+    if (c === '"' || c === "'"){ let j = i + 1; while (j < src.length && src[j] !== c){ if (src[j] === "\\") j++; j++; }
+      const closed = j < src.length;                       // 'text' and "text" mean the same in Python
+      out.push({v: '"' + src.slice(i + 1, closed ? j : src.length) + (closed ? '"' : ""), str: true, closed}); i = j + 1; continue; }
+    if (/[A-Za-z_]/.test(c)){ let j = i; while (j < src.length && /[A-Za-z0-9_]/.test(src[j])) j++; out.push({v: src.slice(i, j), id: true}); i = j; continue; }
+    if (/[0-9]/.test(c)){ let j = i; while (j < src.length && /[0-9.]/.test(src[j])) j++; out.push({v: src.slice(i, j), num: true}); i = j; continue; }
+    const two = src.slice(i, i + 2);
+    if (OPS.includes(two)){ out.push({v: two}); i += 2; continue; }
+    out.push({v: c}); i++;
+  }
+  return out;
+}
+const tv = ts => ts.map(t => t.v);
+const same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
+
+/* ============================================================ checker */
+const leadOf = raw => raw.match(/^[ \t]*/)[0];
+function matched(line, raw){
+  const V = tv(tokens(raw.trim()));
+  return [line.code, ...(line.alt || [])].find(c => same(V, tv(tokens(c)))) || line.code;
+}
+function count(ts, ch){ return ts.filter(t => t.v === ch).length; }
+function firstDiff(a, b){ let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++; return i; }
+
+function check(line, raw){
+  const lead = leadOf(raw), s = raw.trim();
+  if (!s) return {ok:false, msg:"Type the line of code into the box first."};
+  const T = tokens(s), V = tv(T);
+  const targets = [line.code, ...(line.alt || [])].map(c => tv(tokens(c)));
+  if (targets.some(t => same(V, t))){
+    if (line.indent){      // this line is the one place where the student types the indent themselves
+      if (!lead) return {ok:false, msg:"The words are right, but the line still starts at the left edge, so it is still the buggy line. Click at the very start of the box and press the <b>space bar 4 times</b>."};
+      if (lead !== "    ") return {ok:false, msg:`Use exactly <b>4 spaces</b> so it lines up with the other <code>print</code>. You have ${lead.includes("\t") ? "a tab" : lead.length + (lead.length === 1 ? " space" : " spaces")}.`};
+      return {ok:true, msg:"✓ Correct. Four spaces put this line inside the <code>else</code> block."};
+    }
+    return {ok:true, msg:"✓ Correct." + (lead ? " (No need to type the spaces at the start: the indent is added for you.)" : "")};
+  }
+  const E = targets[0], ET = tokens(line.code);
+
+  // 0. they typed the buggy line again
+  if (line.was && same(V, tv(tokens(line.was)))) return {ok:false, msg:"That is the buggy line, unchanged. Read <b>why it is wrong</b> above, then change just that part."};
+  // 1. capital letters
+  const lowerHit = targets.find(t => same(V.map(x => x.toLowerCase()), t.map(x => x.toLowerCase())));
+  if (lowerHit){
+    const i = V.findIndex((x, k) => x !== lowerHit[k]);
+    return {ok:false, msg:`Python is case-sensitive: capital letters matter. Write <code>${esc(lowerHit[i])}</code>, not <code>${esc(V[i])}</code>.`};
+  }
+  // 2. line-specific mistakes the class often makes
+  for (const [re, m] of (line.checks || [])) if (re.test(s)) return {ok:false, msg: m};
+  // 3. semicolons do not belong in Python
+  if (V[V.length - 1] === ";") return {ok:false, msg:"Python lines do not end with a semicolon <code>;</code>. Take it off."};
+  // 4. unclosed text
+  const bad = T.find(t => t.str && !t.closed);
+  if (bad) return {ok:false, msg:"Your text is missing its closing speech mark."};
+  // 5. brackets that do not pair up
+  if (count(T, "(") !== count(T, ")")) return {ok:false, msg:`Your round brackets do not pair up: you have ${count(T, "(")} <code>(</code> and ${count(T, ")")} <code>)</code>.`};
+  // 6. the colon at the end of if / elif / else
+  const wantColon = E[E.length - 1] === ":", hasColon = V[V.length - 1] === ":";
+  if (wantColon && !hasColon && targets.some(t => same([...V, ":"], t))) return {ok:false, msg:"Nearly. This line needs a colon <code>:</code> at the end. The colon tells Python that a block is about to start."};
+  if (!wantColon && hasColon) return {ok:false, msg:"No colon at the end of this line. Only <code>if</code>, <code>elif</code> and <code>else</code> lines end with <code>:</code>"};
+  // 7. = and == mixed up
+  if (E.includes("==") && !V.includes("==") && V.includes("=")) return {ok:false, msg:"To ask \"is it equal to?\" use <code>==</code>. A single <code>=</code> stores a value."};
+  if (E.includes("=") && !E.includes("==") && V.includes("==")) return {ok:false, msg:"Here you are storing a value, so use one <code>=</code>. Two (<code>==</code>) asks a question."};
+  // 8. wrong text in speech marks
+  const es = ET.filter(t => t.str).map(t => t.v), ss = T.filter(t => t.str).map(t => t.v);
+  if (es.length && ss.length && es.join() !== ss.join() && es.length === ss.length) return {ok:false, msg:`The text in speech marks must be exactly <code>${esc(es.join(" and "))}</code>: check spelling, capitals and spaces.`};
+  // 9. first difference against the closest accepted answer
+  const best = targets.reduce((b, t) => { const k = firstDiff(V, t); return k > b.k ? {k, t} : b; }, {k:-1, t:E});
+  const i = best.k, want = best.t;
+  if (i >= V.length) return {ok:false, msg: wantColon && V.length === want.length - 1 ? "Nearly. This line needs a colon <code>:</code> at the end." : `Your line stops too early. Next it needs <code>${esc(want[i])}</code>.`};
+  if (i >= want.length) return {ok:false, msg:`There is something extra at the end: <code>${esc(V.slice(i).join(" "))}</code>. Take it out.`};
+  const after = i ? ` after <code>${esc(want.slice(Math.max(0, i - 2), i).join(" "))}</code>` : " at the start";
+  if (/^[A-Za-z_]/.test(want[i]) && /^[A-Za-z_]/.test(V[i])) return {ok:false, msg:`Check the word${after}: the instruction needs <code>${esc(want[i])}</code>, you wrote <code>${esc(V[i])}</code>.`};
+  if (want.slice(i + 1).length && same(V.slice(i), want.slice(i + 1))) return {ok:false, msg:`Something is missing${after}: add <code>${esc(want[i])}</code>.`};
+  return {ok:false, msg:`Look${after}: it should be <code>${esc(want[i])}</code>, you have <code>${esc(V[i])}</code>.`};
+}
+
+/* ============================================================ shared line checks */
+const PRINT = [[/^print\s*[^(\s]|^print\s+[^(]/i, "<code>print</code> needs round brackets: <code>print( … )</code>"], [/^(Console|console)\b/, "That is C#. In Python it is just <code>print( … )</code>"]];
+const ELSE = [[/^else\s*[^:\s]/, "<code>else</code> never has a condition. It means \"anything that is left\", so it is just <code>else:</code>"], [/^elif\s*:?$/, "<code>elif</code> needs a condition after it. For \"anything else\" use <code>else:</code>"], [/^otherwise/i, "The Python word for \"otherwise\" is <code>else</code>."]];
+const ELIF = [[/^else\s+if\b/, "In Python \"else if\" is squashed into one word: <code>elif</code>."], [/^elseif\b/, "The Python word is <code>elif</code>."]];
+const READINT = [[/float\s*\(/, "This is a whole number, so use <code>int( )</code>, not <code>float( )</code>."], [/str\s*\(/, "<code>str( )</code> makes text, and <code>input()</code> already gives text. To get a whole number use <code>int( )</code>."], [/int\s*\(\s*input\s*\)/, "<code>input</code> needs its own pair of brackets: <code>int(input())</code>."], [/input\s*\(\s*["']/, "Leave the brackets of <code>input()</code> empty. Any message in there gets printed and the CodeBash tests will fail."]];
+/* print("Label:", value) and its two other spellings */
+const say = (label, v, end) => end
+  ? [`print("${label}", ${v}, "${end}")`, `print("${label} " + str(${v}) + " ${end}")`, `print(f"${label} {${v}} ${end}")`]
+  : [`print("${label}", ${v})`, `print("${label} " + ${v})`, `print(f"${label} {${v}}")`];
+const spaceSlip = label => [[new RegExp(`"${label} "\\s*,`), `With commas, Python puts the space in for you. Take the space out of the speech marks: <code>"${label}"</code>, otherwise you get two spaces.`], [new RegExp(`"${label}"\\s*\\+`), `Joining with <code>+</code> does not add a space. Put one before the closing speech mark: <code>"${label} "</code>, or use a comma instead.`]];
+
+/* ============================================================ SECTION A: multiple choice */
+const MCQ = [
+ { id:"A1", title:"Reading a number", prompt:"Which line reads a <b>whole number</b> from the user so it can be used in maths?",
+   opts:["age = input()","age = int(input())","age = str(input())"], ans:1,
+   explain:`<p><code>input()</code> always gives back <b>text</b> (a string), even when the user types digits. Text cannot be used in maths.</p>
+     <p><code>int( )</code> wrapped round it turns that text into a <b>whole number</b> (an integer). So the line works from the inside out: <code>input()</code> reads the typing, <code>int( )</code> converts it, <code>age =</code> stores it.</p>
+     <p class="slip"><b>Common slips:</b> A leaves it as text. C uses <code>str( )</code>, which makes text out of something that is already text.</p>`,
+   alt:{ prompt:"A program is going to <b>add 10</b> to the score the user types in. Which line reads the score correctly?",
+     opts:[["score = str(input())","str( ) makes text. Text cannot have 10 added to it."],
+           ["score = input()","input() on its own gives text, so score + 10 would crash."],
+           ["score = int(input())","int( ) turns the typed text into a whole number, ready for maths."]], ans:2 } },
+ { id:"A2", title:"Equal to", prompt:"Which symbol asks the question <b>\"is it equal to?\"</b>",
+   opts:["==","="], ans:0,
+   explain:`<p>Python uses the two symbols for two different jobs:</p>
+     <ul><li><code>=</code> <b>stores</b> a value: <code>age = 12</code> means \"put 12 in <code>age</code>\".</li><li><code>==</code> <b>asks a question</b>: <code>age == 12</code> means \"is <code>age</code> equal to 12?\" The answer is <code>True</code> or <code>False</code>.</li></ul>
+     <p class="slip"><b>Common slip:</b> writing <code>if age = 12:</code> with one equals sign. An <code>if</code> asks a question, so it needs <code>==</code>.</p>`,
+   alt:{ prompt:"Which line correctly checks whether <code>colour</code> is equal to <code>\"red\"</code>?",
+     opts:[['if colour = "red":',"One = stores a value. An if asks a question, so it needs two: =="],
+           ['if colour == "red":',"== asks \"is it equal to?\", which is what an if needs."]], ans:1 } },
+ { id:"A3", title:"True or False", prompt:"What does this line show on the screen?",
+   code:`print(7 >= 7)`,
+   opts:["True","False","7"], ans:0,
+   explain:`<p><code>&gt;=</code> means \"greater than <b>or equal to</b>\". 7 is not greater than 7, but it <b>is equal</b> to 7, so the answer to the question is <code>True</code>.</p>
+     <p>A comparison never prints one of its numbers. It always works out as <code>True</code> or <code>False</code>.</p>
+     <p class="slip"><b>Common slip:</b> reading <code>&gt;=</code> as just \"greater than\" and choosing False.</p>`,
+   alt:{ prompt:"What does this line show on the screen?",
+     code:`print(9 > 9)`,
+     opts:[["True","> means greater than only. 9 is equal to 9, not greater than it. It would be True with >="],
+           ["False","9 is not greater than 9, and > has no \"or equal to\" part, so the answer is False."],
+           ["9","A comparison never prints one of its numbers. It works out as True or False."]], ans:1 } },
+ { id:"A4", title:"Matching strings", prompt:"What does this line show on the screen?",
+   code:`print("cat" == "Cat")`,
+   opts:["True","False","an error"], ans:1,
+   explain:`<p>Two strings are only equal if <b>every character matches exactly</b>. To Python a small <code>c</code> and a capital <code>C</code> are different characters, so <code>"cat"</code> and <code>"Cat"</code> are not equal.</p>
+     <p>Comparing two strings is allowed, so there is no error. The answer to the question is simply <code>False</code>.</p>
+     <p class="slip"><b>Common slip:</b> thinking capitals do not matter. This is why the quiz in B2 says Wrong for <code>paris</code>.</p>`,
+   alt:{ prompt:"What does this line show on the screen?",
+     code:`print("YES" == "yes")`,
+     opts:[["True","Capital and small letters are different characters, so these two strings do not match."],
+           ["False","Every character has to match exactly. Y and y are different, so the strings are not equal."],
+           ["an error","Comparing two strings is allowed. Python just answers True or False."]], ans:1 } },
+ { id:"A5", title:"Remainder", prompt:"What does this line show on the screen?",
+   code:`print(17 % 5)`,
+   opts:["3","3.4","2"], ans:2,
+   explain:`<p><code>%</code> gives the <b>remainder</b> after dividing. It is not a percentage.</p>
+     <p>5 goes into 17 <b>three</b> times (3 × 5 = 15). That leaves 17 − 15 = <b>2</b> left over. So <code>17 % 5</code> is 2.</p>
+     <p class="slip"><b>Common slips:</b> 3 is how many times 5 goes in. 3.4 is the answer to the ordinary division <code>17 / 5</code>.</p>`,
+   alt:{ prompt:"What does this line show on the screen?",
+     code:`print(20 % 6)`,
+     opts:[["3","3 is how many times 6 goes into 20. % gives what is left over afterwards."],
+           ["2","6 goes into 20 three times (18). 20 - 18 leaves a remainder of 2."],
+           ["3.33","That is ordinary division, 20 / 6. The % sign gives the remainder instead."]], ans:1 } },
+ { id:"A6", title:"Which branch", prompt:"Look at this program. What is printed?",
+   code:`temp = 0\nif temp > 0:\n    print("Above zero")\nelse:\n    print("Not above zero")`,
+   opts:["Above zero","Not above zero","nothing"], ans:1,
+   explain:`<p>Python asks the question <code>temp &gt; 0</code>. That is <code>0 &gt; 0</code>, which is <b>False</b>: 0 is equal to 0, not greater than it.</p>
+     <p>When the <code>if</code> question is False, Python skips that block and runs the <code>else</code> block instead.</p>
+     <p class="slip"><b>Common slip:</b> choosing \"nothing\". With <code>if</code> and <code>else</code> exactly one of the two blocks <b>always</b> runs.</p>`,
+   alt:{ prompt:"Look at this program. What is printed?",
+     code:`speed = 30\nif speed > 30:\n    print("Too fast")\nelse:\n    print("Speed OK")`,
+     opts:[["Too fast","30 > 30 is False: 30 is equal to 30, not greater than it. So the if block is skipped."],
+           ["Speed OK","30 > 30 is False, so Python skips the if block and runs the else block."],
+           ["nothing","With if and else, one of the two blocks always runs."]], ans:1 } },
+ { id:"A7", title:"Order matters", prompt:"Look at this program. Read it carefully. What is printed?",
+   code:`score = 85\nif score >= 40:\n    print("Pass")\nelif score >= 50:\n    print("Merit")\nelif score >= 70:\n    print("Distinction")\nelse:\n    print("Fail")`,
+   opts:["Distinction","Merit","Pass"], ans:2,
+   explain:`<p>Python checks the conditions <b>from the top</b> and runs the <b>first one that is True</b>. After that it skips every <code>elif</code> and the <code>else</code>.</p>
+     <p>The first question is <code>85 &gt;= 40</code>. That is True, so it prints <code>Pass</code> and stops looking. It never reaches the Merit or Distinction lines.</p>
+     <p class="slip"><b>Why this matters:</b> the program is badly ordered. To work properly the <b>biggest</b> number has to be tested first. That is exactly the bug in B4.</p>`,
+   alt:{ prompt:"Look at this program. Read it carefully. What is printed?",
+     code:`age = 15\nif age >= 5:\n    print("Child ticket")\nelif age >= 13:\n    print("Teen ticket")\nelse:\n    print("Free")`,
+     opts:[["Teen ticket","15 >= 13 is True, but Python never gets that far. An earlier condition is True first."],
+           ["Child ticket","15 >= 5 is True and it is the first condition, so Python prints Child ticket and skips the rest."],
+           ["Free","else only runs when every condition above it is False. Here the first one is True."]], ans:1 } },
+ { id:"A8", title:"Count the lines", numeric:true, prompt:"Look at this program. It uses three separate <code>if</code> statements. <b>How many lines</b> are printed?",
+   code:`score = 85\nif score >= 70:\n    print("Distinction")\nif score >= 50:\n    print("Merit")\nif score >= 40:\n    print("Pass")`,
+   opts:["3"], ans:0,
+   explain:`<p>These are three <b>separate</b> <code>if</code> statements, not <code>if</code> / <code>elif</code>. Each one is checked on its own, whatever happened before.</p>
+     <ol><li><code>85 &gt;= 70</code> is True → prints Distinction</li><li><code>85 &gt;= 50</code> is True → prints Merit</li><li><code>85 &gt;= 40</code> is True → prints Pass</li></ol>
+     <p>All three are True, so <b>3</b> lines are printed.</p>
+     <p class="slip"><b>Compare with A7:</b> with <code>elif</code>, only the first True branch runs. With separate <code>if</code>s, every True one runs.</p>`,
+   alt:{ prompt:"Same program, different score. <b>How many lines</b> are printed?",
+     code:`score = 55\nif score >= 70:\n    print("Distinction")\nif score >= 50:\n    print("Merit")\nif score >= 40:\n    print("Pass")`,
+     opts:[["1","Each if is checked on its own. After printing Merit, Python still checks the last if, and 55 >= 40 is True too."],
+           ["2","55 >= 70 is False. 55 >= 50 is True (Merit). 55 >= 40 is True (Pass). Two lines."],
+           ["3","55 >= 70 is False, so Distinction is not printed."]], ans:1 } }
+];
+
+/* ============================================================ SECTIONS B and C: code questions
+   k: given (shown, not typed) · line (student types it)
+   d = indent depth: 0 at the left edge, 1 inside an if / elif / else block
+   was = the buggy line being replaced · why = why it is wrong · indent = student must type the 4 spaces */
+const TASKS = [
+ /* ---------------- B: debug ---------------- */
+ { id:"B1", sec:"B", title:"Fix the driving check", marks:2, type:"DEBUG",
+   q:"This program should read an age and say whether the person is old enough to learn to drive (17 or over). It crashes when you run it.",
+   egs:[{inp:["17"], out:"You can learn to drive"}, {inp:["16"], out:"Too young to drive"}],
+   howto:"Only <b>one line</b> is wrong. The grey lines are correct: leave them alone.",
+   rows:[
+    {k:"line", d:0, was:"age = input()", code:"age = int(input())",
+      why:"<code>input()</code> always gives <b>text</b>. So <code>age</code> holds the text <code>\"17\"</code>, not the number 17. On the next line Python is asked whether a piece of text is <code>&gt;= 17</code>, and it cannot compare text with a number, so it crashes.",
+      task:"Retype the line so the age is turned into a <b>whole number</b> as it is read.",
+      hint:"Wrap <code>input()</code> inside <code>int( )</code>. The line ends with two closing brackets.",
+      checks:[...READINT, [/int\s*\(\s*age\s*\)/, "Convert it as it is read: put <code>input()</code> inside the brackets of <code>int( )</code>."]]},
+    {k:"given", d:0, code:"if age >= 17:"},
+    {k:"given", d:1, code:`print("You can learn to drive")`},
+    {k:"given", d:0, code:"else:"},
+    {k:"given", d:1, code:`print("Too young to drive")`}
+   ]},
+ { id:"B2", sec:"B", title:"Fix the capital city quiz", marks:3, type:"DEBUG",
+   q:"This quiz program should print <b>Correct</b> if the user types Paris, and <b>Wrong</b> for anything else. It has <b>two</b> errors.",
+   egs:[{inp:["Paris"], out:"Correct"}, {inp:["London"], out:"Wrong"}],
+   howto:"<b>Both errors are on the same line.</b> The grey lines are correct: leave them alone.",
+   rows:[
+    {k:"given", d:0, code:"answer = input()"},
+    {k:"line", d:0, was:`if answer = "Paris"`, code:`if answer == "Paris":`, alt:[`if "Paris" == answer:`],
+      why:"<b>Error 1:</b> a single <code>=</code> stores a value. An <code>if</code> asks a question, and \"is it equal to?\" is written <code>==</code>. <b>Error 2:</b> every <code>if</code> line must end with a colon <code>:</code> to show that a block is starting. This one has none.",
+      task:"Retype the <code>if</code> line with <b>both</b> errors fixed.",
+      hint:"Two equals signs in the middle, and a colon at the very end.",
+      checks:[[/==\s*Paris\b/, "<code>Paris</code> is text, so it needs speech marks: <code>\"Paris\"</code>."], [/\.lower|\.upper/, "Do not change the capitals: the tests want <code>paris</code> to be marked Wrong."]]},
+    {k:"given", d:1, code:`print("Correct")`},
+    {k:"given", d:0, code:"else:"},
+    {k:"given", d:1, code:`print("Wrong")`}
+   ]},
+ { id:"B3", sec:"B", title:"Fix the big number check", marks:3, type:"DEBUG",
+   q:"This program should print <b>Big number</b> for numbers over 100, and <b>Small number</b> for everything else. It has <b>one</b> error.",
+   egs:[{inp:["150"], out:"Big number"}, {inp:["7"], out:"Small number"}],
+   howto:"Only <b>one line</b> is wrong, and every word in it is spelt correctly. Look at <b>where the line starts</b>. This is the one question where you type the spaces at the start yourself.",
+   rows:[
+    {k:"given", d:0, code:"number = int(input())"},
+    {k:"given", d:0, code:"if number > 100:"},
+    {k:"given", d:1, code:`print("Big number")`},
+    {k:"given", d:0, code:"else:"},
+    {k:"line", d:1, wasD:0, indent:true, was:`print("Small number")`, code:`print("Small number")`,
+      why:"The line after <code>else:</code> starts at the left edge. Python uses the <b>indent</b> (the spaces at the start of a line) to know which lines belong inside a block. With no indent, the <code>else</code> has nothing inside it, and Python stops with an <code>IndentationError</code>.",
+      task:"Retype the line with <b>4 spaces</b> in front of <code>print</code>, so it sits inside the <code>else</code> block.",
+      hint:"Press the space bar 4 times, then type <code>print(\"Small number\")</code>. It should line up with the other <code>print</code> above.",
+      checks:PRINT}
+   ]},
+ { id:"B4", sec:"B", title:"Fix the game stars", marks:5, type:"DEBUG",
+   q:"This game gives stars for points:<ul><li>100 or more: <code>3 stars</code></li><li>50 or more: <code>2 stars</code></li><li>10 or more: <code>1 star</code></li><li>anything else: <code>No stars</code></li></ul>The program runs with no error message, but it gives the <b>wrong answer</b> for big scores.",
+   egs:[{inp:["120"], out:"3 stars"}, {inp:["60"], out:"2 stars"}],
+   howto:"The tests are in the <b>wrong order</b>. Python runs the first branch that is True, so the <b>biggest</b> number must be tested first. Swap the top branch with the third one: that is <b>four lines</b> to change. You can fix them in any order.",
+   rows:[
+    {k:"given", d:0, code:"points = int(input())"},
+    {k:"line", d:0, was:"if points >= 10:", code:"if points >= 100:", alt:["if points > 99:", "if 100 <= points:"],
+      why:"With 120 points, <code>120 &gt;= 10</code> is True straight away. Python prints <code>1 star</code> and skips everything below, so no score can ever reach the 2 or 3 star branches. The first test has to be the <b>hardest</b> one to pass.",
+      task:"Retype the <code>if</code> line so it tests for <b>100 or more</b>.",
+      hint:"Only the number changes: <code>10</code> becomes <code>100</code>.",
+      checks:[[/^elif\b/, "The first test in a chain always starts with <code>if</code>."], [/>\s*100\s*:/, "<code>&gt; 100</code> misses a score of exactly 100. \"100 or more\" is <code>&gt;= 100</code>."]]},
+    {k:"line", d:1, was:`print("1 star")`, code:`print("3 stars")`,
+      why:"This is now the branch for 100 or more points, so it has to give the top prize.",
+      task:"Retype the line so this branch prints <code>3 stars</code>.",
+      hint:"<code>print(\"3 stars\")</code> with an s on the end of stars.",
+      checks:PRINT},
+    {k:"given", d:0, code:"elif points >= 50:"},
+    {k:"given", d:1, code:`print("2 stars")`},
+    {k:"line", d:0, was:"elif points >= 100:", code:"elif points >= 10:", alt:["elif points > 9:", "elif 10 <= points:"],
+      why:"Any score of 100 or more has already been caught by the branches above, so this test can never be True. It is the last test before <code>else</code>, so it should be the <b>easiest</b> one to pass.",
+      task:"Retype the <code>elif</code> line so it tests for <b>10 or more</b>.",
+      hint:"Only the number changes: <code>100</code> becomes <code>10</code>.",
+      checks:[...ELIF, [/^if\b/, "Keep it as <code>elif</code>. A separate <code>if</code> would run as well as the branch above, and print two lines."], [/>\s*10\s*:/, "<code>&gt; 10</code> misses a score of exactly 10. \"10 or more\" is <code>&gt;= 10</code>."]]},
+    {k:"line", d:1, was:`print("3 stars")`, code:`print("1 star")`,
+      why:"This is now the branch for scores from 10 to 49, so it gives the smallest prize.",
+      task:"Retype the line so this branch prints <code>1 star</code>.",
+      hint:"<code>print(\"1 star\")</code> with no s on star.",
+      checks:PRINT},
+    {k:"given", d:0, code:"else:"},
+    {k:"given", d:1, code:`print("No stars")`}
+   ]},
+
+ /* ---------------- C: write it ---------------- */
+ { id:"C1", sec:"C", title:"Library fine", marks:4, type:"COMPLETE",
+   q:"A library charges a fine if a book is late. The program reads the number of days late.<ul><li>More than 0 days late: print <code>Fine due</code></li><li>Otherwise: print <code>No fine</code></li></ul>On CodeBash you had to replace each <code>____</code> to finish the program.",
+   egs:[{inp:["3"], out:"Fine due"}, {inp:["0"], out:"No fine"}],
+   howto:"<b>Two lines</b> had a blank in them. Type each of those lines out in full. The grey lines were given to you.",
+   rows:[
+    {k:"given", d:0, code:"days = int(input())"},
+    {k:"line", d:0, code:"if days > 0:", alt:["if days >= 1:", "if 0 < days:", "if days != 0:"],
+      task:"Write the <code>if</code> line: <b>if</b> <code>days</code> is <b>greater than</b> 0…",
+      does:"\"More than 0\" is the question <code>days &gt; 0</code>. The symbol <code>&gt;</code> means greater than. The colon at the end starts the block that runs when the answer is True.",
+      hint:"Pattern: <code>if variable &gt; number:</code>",
+      checks:[[/>=\s*0\s*:?$/, "<code>&gt;= 0</code> is True when <code>days</code> is 0, so a book that is not late would get a fine. \"More than 0\" is just <code>&gt;</code>."], [/days\s*<\s*0/, "<code>&lt;</code> means less than. You need greater than: <code>&gt;</code>."], [/=>/, "The symbol is not needed here, and it is written <code>&gt;=</code> anyway. Use plain <code>&gt;</code>."], [/____/, "Replace the <code>____</code> with the symbol for \"greater than\"."]]},
+    {k:"given", d:1, code:`print("Fine due")`},
+    {k:"line", d:0, code:"else:",
+      task:"Write the line that means <b>otherwise</b>.",
+      does:"<code>else</code> catches everything the <code>if</code> did not. It has no condition of its own, just a colon.",
+      hint:"One word and a colon.",
+      checks:[...ELSE, [/^elif\b/, "There is only one other possibility, so no new test is needed. Use <code>else:</code>"]]},
+    {k:"given", d:1, code:`print("No fine")`}
+   ]},
+ { id:"C2", sec:"C", title:"Swimming badge", marks:4, type:"COMPLETE",
+   q:"A swimming club gives badges for the number of lengths swum:<ul><li>40 or more: <code>Gold</code></li><li>20 or more: <code>Silver</code></li><li>10 or more: <code>Bronze</code></li><li>anything else: <code>Keep training</code></li></ul>The Gold branch is written for you. Add the rest.",
+   egs:[{inp:["20"], out:"Silver"}, {inp:["9"], out:"Keep training"}],
+   howto:"<b>Six lines</b>, in three pairs: a test, then what to print. The tests go from the biggest number down to the smallest, like the fixed program in B4.",
+   rows:[
+    {k:"given", d:0, code:"lengths = int(input())"},
+    {k:"given", d:0, code:"if lengths >= 40:"},
+    {k:"given", d:1, code:`print("Gold")`},
+    {k:"line", d:0, code:"elif lengths >= 20:", alt:["elif lengths > 19:", "elif 20 <= lengths:"],
+      task:"Write an <code>elif</code> line that tests for <b>20 or more</b> lengths.",
+      does:"<code>elif</code> is short for \"else if\". Python only gets here when the Gold test was False, so this branch catches 20 to 39.",
+      hint:"Copy the shape of the Gold line: <code>elif lengths &gt;= 20:</code>",
+      checks:[...ELIF, [/^if\b/, "Use <code>elif</code>. With a separate <code>if</code>, someone with 40 lengths would get Gold <b>and</b> Silver."], [/>\s*20\s*:?$/, "<code>&gt; 20</code> misses exactly 20 lengths. \"20 or more\" is <code>&gt;= 20</code>."], [/=>/, "\"Greater than or equal to\" is written <code>&gt;=</code>, with the <code>&gt;</code> first."]]},
+    {k:"line", d:1, code:`print("Silver")`,
+      task:"Inside that branch: print <code>Silver</code>.",
+      does:"The indent (shown by the dots) puts this line inside the <code>elif</code> block, so it only runs when that test is True.",
+      hint:"Capital S, in speech marks.", checks:PRINT},
+    {k:"line", d:0, code:"elif lengths >= 10:", alt:["elif lengths > 9:", "elif 10 <= lengths:"],
+      task:"Write another <code>elif</code> line that tests for <b>10 or more</b> lengths.",
+      does:"Python only gets here when both tests above were False, so this branch catches 10 to 19.",
+      hint:"<code>elif lengths &gt;= 10:</code>",
+      checks:[...ELIF, [/^if\b/, "Use <code>elif</code> so that only one badge is printed."], [/^else\b/, "There is still a test to make here (10 or more), so it is <code>elif</code>. <code>else</code> comes last."], [/>\s*10\s*:?$/, "<code>&gt; 10</code> misses exactly 10 lengths. \"10 or more\" is <code>&gt;= 10</code>."]]},
+    {k:"line", d:1, code:`print("Bronze")`,
+      task:"Inside that branch: print <code>Bronze</code>.",
+      does:"Runs only for 10 to 19 lengths.",
+      hint:"Capital B, in speech marks.", checks:PRINT},
+    {k:"line", d:0, code:"else:",
+      task:"Write the line that catches <b>anything else</b>.",
+      does:"<code>else</code> runs when every test above was False: here that is 9 lengths or fewer. It needs no condition.",
+      hint:"One word and a colon.", checks:[...ELSE, [/^elif\b/, "No more tests are needed: everything left gets the same message. Use <code>else:</code>"]]},
+    {k:"line", d:1, code:`print("Keep training")`,
+      task:"Inside the <code>else</code>: print <code>Keep training</code>.",
+      does:"The message for everyone who has not reached a badge yet.",
+      hint:"Capital K, small t, one space.", checks:PRINT}
+   ]},
+ { id:"C3", sec:"C", title:"Sharing sweets", marks:4, type:"WRITE",
+   q:"Sweets are shared between <b>4</b> friends. Read the number of sweets as a whole number.<ul><li>If it divides exactly by 4, print <code>Shares equally</code></li><li>Otherwise print <code>Left over:</code> followed by the remainder</li></ul>",
+   egs:[{inp:["12"], out:"Shares equally"}, {inp:["14"], out:"Left over: 2"}],
+   howto:"<b>Five lines.</b> Read the number, then one <code>if</code> / <code>else</code>. The key idea is from A5: <code>%</code> gives the remainder, and a number divides exactly when its remainder is 0.",
+   rows:[
+    {k:"line", d:0, code:"sweets = int(input())",
+      task:"Read a whole number from the user and store it in a variable called <code>sweets</code>.",
+      does:"<code>input()</code> reads what is typed as text. <code>int( )</code> turns it into a whole number. <code>sweets =</code> stores it.",
+      hint:"Pattern: <code>name = int(input())</code>",
+      checks:[[/^sweets\s*=\s*input\s*\(\s*\)$/, "<code>input()</code> gives text. Wrap it in <code>int( )</code> so it can be used in maths (the same fix as B1)."], ...READINT]},
+    {k:"line", d:0, code:"if sweets % 4 == 0:", alt:["if 0 == sweets % 4:", "if (sweets % 4) == 0:"],
+      task:"<b>If</b> the remainder when <code>sweets</code> is divided by 4 is <b>equal to 0</b>…",
+      does:"<code>sweets % 4</code> works out the remainder. <code>== 0</code> asks whether that remainder is zero, which means nothing is left over.",
+      hint:"<code>if sweets % 4 == 0:</code>",
+      checks:[[/sweets\s*\/\s*4/, "<code>/</code> divides. To get the <b>remainder</b> use <code>%</code>."], [/%\s*4\s*:?$/, "Finish the question: is the remainder <b>equal to 0</b>? Add <code>== 0</code>."], [/==\s*4/, "Compare the remainder with <b>0</b>. A remainder of 0 means it divides exactly."]]},
+    {k:"line", d:1, code:`print("Shares equally")`,
+      task:"…print <code>Shares equally</code>.",
+      does:"Runs when the remainder is 0, for example 12 sweets.",
+      hint:"Capital S, small e, one space.", checks:PRINT},
+    {k:"line", d:0, code:"else:",
+      task:"Write the line that means <b>otherwise</b>.",
+      does:"Catches every number that does not divide exactly by 4.",
+      hint:"One word and a colon.", checks:ELSE},
+    {k:"line", d:1, code:`print("Left over:", sweets % 4)`, alt:[`print("Left over: " + str(sweets % 4))`, `print(f"Left over: {sweets % 4}")`],
+      task:"Inside the <code>else</code>: print <code>Left over:</code> followed by the remainder, <code>sweets % 4</code>.",
+      does:"A comma inside <code>print</code> lets you print text and a number together. Python puts one space between them for you, so 14 sweets gives <code>Left over: 2</code>.",
+      hint:"<code>print(\"Left over:\", sweets % 4)</code>",
+      checks:[...spaceSlip("Left over:"), [/"Left over:\s*"\s*\+\s*sweets/, "<code>+</code> cannot join text to a number. Use a comma instead: <code>\"Left over:\", sweets % 4</code>"], [/,\s*sweets\s*\)/, "That prints the number of sweets. Print the <b>remainder</b>: <code>sweets % 4</code>."], [/"[^"]*sweets\s*%/, "Keep <code>sweets % 4</code> outside the speech marks, or Python prints those words instead of working it out."], ...PRINT]}
+   ]},
+ { id:"C4", sec:"C", title:"Quiz result", marks:5, type:"WRITE",
+   q:"Read a student's <b>name</b>, then their <b>mark</b> out of 20 (a whole number). Print one message that ends with their name:<ul><li>15 or more: <code>Excellent work</code> and the name</li><li>10 or more: <code>Good effort</code> and the name</li><li>anything else: <code>Keep practising</code> and the name</li></ul>",
+   egs:[{inp:["Sam","18"], out:"Excellent work Sam"}, {inp:["Zac","9"], out:"Keep practising Zac"}],
+   howto:"<b>Eight lines.</b> Two lines to read the inputs (name first, then mark), then an <code>if</code> / <code>elif</code> / <code>else</code> with the biggest number tested first.",
+   rows:[
+    {k:"line", d:0, code:"name = input()",
+      task:"Read the name and store it in a variable called <code>name</code>.",
+      does:"A name is text, and <code>input()</code> already gives text, so no <code>int( )</code> is needed here.",
+      hint:"Pattern: <code>name = input()</code>",
+      checks:[[/int\s*\(/, "A name is text, not a number. Just <code>input()</code> with no <code>int( )</code>."], [/input\s*\(\s*["']/, "Leave the brackets of <code>input()</code> empty, or the CodeBash tests will fail."], [/input\s*$/, "<code>input</code> needs brackets: <code>input()</code>."]]},
+    {k:"line", d:0, code:"mark = int(input())",
+      task:"Read the mark as a <b>whole number</b> and store it in a variable called <code>mark</code>.",
+      does:"The mark is going to be compared with 15 and 10, so it must be a number: wrap <code>input()</code> in <code>int( )</code>.",
+      hint:"Pattern: <code>mark = int(input())</code>",
+      checks:[[/^mark\s*=\s*input\s*\(\s*\)$/, "<code>input()</code> gives text. Wrap it in <code>int( )</code> so it can be compared with a number."], ...READINT]},
+    {k:"line", d:0, code:"if mark >= 15:", alt:["if mark > 14:", "if 15 <= mark:"],
+      task:"<b>If</b> <code>mark</code> is <b>15 or more</b>…",
+      does:"The highest band is tested first. <code>&gt;=</code> means \"greater than or equal to\", so a mark of exactly 15 counts.",
+      hint:"<code>if mark &gt;= 15:</code>",
+      checks:[[/>\s*15\s*:?$/, "<code>&gt; 15</code> misses a mark of exactly 15. \"15 or more\" is <code>&gt;= 15</code>."], [/=>/, "\"Greater than or equal to\" is written <code>&gt;=</code>, with the <code>&gt;</code> first."], [/>=\s*10/, "Test the <b>biggest</b> number first: 15. Otherwise a mark of 18 would get the wrong message (see A7)."]]},
+    {k:"line", d:1, code:`print("Excellent work", name)`, alt:say("Excellent work", "name").slice(1),
+      task:"…print <code>Excellent work</code> followed by the name.",
+      does:"The text is in speech marks. <code>name</code> is a variable, so it has none. The comma joins them with a space: <code>Excellent work Sam</code>.",
+      hint:"<code>print(\"Excellent work\", name)</code>",
+      checks:[...spaceSlip("Excellent work"), [/"name"/, "<code>name</code> is a variable, so no speech marks round it. In speech marks it would print the word name."], [/work\s+name"/, "Close the speech marks after <code>work</code>, then a comma, then <code>name</code>."], ...PRINT]},
+    {k:"line", d:0, code:"elif mark >= 10:", alt:["elif mark > 9:", "elif 10 <= mark:"],
+      task:"<b>Else if</b> <code>mark</code> is <b>10 or more</b>…",
+      does:"Only checked when the first test was False, so this branch catches marks from 10 to 14.",
+      hint:"<code>elif mark &gt;= 10:</code>",
+      checks:[...ELIF, [/^if\b/, "Use <code>elif</code>. A separate <code>if</code> would print a second message for a mark of 18 (see A8)."], [/>\s*10\s*:?$/, "<code>&gt; 10</code> misses a mark of exactly 10. Use <code>&gt;= 10</code>."]]},
+    {k:"line", d:1, code:`print("Good effort", name)`, alt:say("Good effort", "name").slice(1),
+      task:"…print <code>Good effort</code> followed by the name.",
+      does:"Same pattern as before with a different message.",
+      hint:"<code>print(\"Good effort\", name)</code>",
+      checks:[...spaceSlip("Good effort"), [/"name"/, "<code>name</code> is a variable, so no speech marks round it."], ...PRINT]},
+    {k:"line", d:0, code:"else:",
+      task:"Write the line that catches <b>anything else</b>.",
+      does:"Runs for marks of 9 or below, when both tests above were False.",
+      hint:"One word and a colon.", checks:[...ELSE, [/^elif\b/, "No more tests are needed. Use <code>else:</code>"]]},
+    {k:"line", d:1, code:`print("Keep practising", name)`, alt:say("Keep practising", "name").slice(1),
+      task:"Inside the <code>else</code>: print <code>Keep practising</code> followed by the name.",
+      does:"Same pattern again. Watch the spelling: practi<b>s</b>ing, with an s.",
+      hint:"<code>print(\"Keep practising\", name)</code>",
+      checks:[[/practicing/i, "Spelling: the message is <code>Keep practising</code>, with an <b>s</b>."], ...spaceSlip("Keep practising"), [/"name"/, "<code>name</code> is a variable, so no speech marks round it."], ...PRINT]}
+   ]},
+ { id:"C5", sec:"C", title:"Taxi fare", marks:6, type:"WRITE",
+   q:"Read the distance of a taxi journey in km (a whole number). Work out the fare:<ul><li>Under 3 km: the fare is 5 pounds</li><li>Under 10 km: 2 pounds for every km</li><li>10 km or more: 1 pound for every km, plus 12 pounds</li></ul>Print the fare in a sentence, exactly like the examples.",
+   egs:[{inp:["2"], out:"Fare: 5 pounds"}, {inp:["9"], out:"Fare: 18 pounds"}, {inp:["25"], out:"Fare: 37 pounds"}],
+   howto:"<b>Eight lines.</b> Read the distance. Each branch <b>works out</b> the fare and stores it in a variable called <code>fare</code>. Then <b>one</b> <code>print</code> at the very end, outside the branches, shows it.",
+   rows:[
+    {k:"line", d:0, code:"distance = int(input())",
+      task:"Read a whole number from the user and store it in a variable called <code>distance</code>.",
+      does:"The distance is used in maths, so it has to be a number: <code>int(input())</code>.",
+      hint:"Pattern: <code>name = int(input())</code>",
+      checks:[[/^distance\s*=\s*input\s*\(\s*\)$/, "<code>input()</code> gives text. Wrap it in <code>int( )</code> so it can be used in maths."], ...READINT]},
+    {k:"line", d:0, code:"if distance < 3:", alt:["if distance <= 2:", "if 3 > distance:"],
+      task:"<b>If</b> <code>distance</code> is <b>less than</b> 3…",
+      does:"\"Under 3\" means less than 3, which is the symbol <code>&lt;</code>. This time the tests go from the <b>smallest</b> number up, because the question says \"under\".",
+      hint:"<code>if distance &lt; 3:</code>",
+      checks:[[/<=\s*3\s*:?$/, "<code>&lt;= 3</code> includes 3 km, but 3 km is not under 3. Use <code>&lt;</code>."], [/>\s*3/, "<code>&gt;</code> means greater than. \"Under 3\" is <code>&lt; 3</code>."], [/<\s*10/, "Test the smallest number first: 3. Otherwise a 2 km journey would be charged the wrong way."]]},
+    {k:"line", d:1, code:"fare = 5",
+      task:"…store <code>5</code> in a variable called <code>fare</code>.",
+      does:"Short journeys cost a flat 5 pounds. Nothing is printed yet: the answer is just remembered in <code>fare</code>.",
+      hint:"Pattern: <code>name = value</code>",
+      checks:[[/^print\b/, "Do not print here. Store the answer in <code>fare</code> and print it once at the end."], [/"5"|'5'/, "5 is a number, so no speech marks."]]},
+    {k:"line", d:0, code:"elif distance < 10:", alt:["elif distance <= 9:", "elif 10 > distance:"],
+      task:"<b>Else if</b> <code>distance</code> is <b>less than</b> 10…",
+      does:"Only checked when the first test was False, so this branch catches 3 km up to 9 km.",
+      hint:"<code>elif distance &lt; 10:</code>",
+      checks:[...ELIF, [/^if\b/, "Use <code>elif</code>. With a separate <code>if</code>, a 2 km journey would have its fare changed again by this branch."], [/<=\s*10\s*:?$/, "<code>&lt;= 10</code> includes 10 km, but 10 km belongs in the last band. Use <code>&lt;</code>."]]},
+    {k:"line", d:1, code:"fare = distance * 2", alt:["fare = 2 * distance", "fare = distance + distance"],
+      task:"…work out <b>2 pounds for every km</b> and store it in <code>fare</code>.",
+      does:"<code>*</code> means multiply. For a 9 km journey this stores 9 × 2 = 18.",
+      hint:"<code>fare = distance * 2</code>",
+      checks:[[/^print\b/, "Do not print here. Store the answer in <code>fare</code>."], [/\bx\b|×/, "Multiply in Python is the star: <code>*</code>."], [/distance\s*\+\s*2/, "2 pounds for <b>every</b> km means multiply by 2, not add 2."], [/^distance\s*\*\s*2$/, "That works the answer out but does not store it. Start with <code>fare =</code>"]]},
+    {k:"line", d:0, code:"else:",
+      task:"Write the line that catches <b>anything else</b> (10 km or more).",
+      does:"If the distance is not under 3 and not under 10, it must be 10 or more, so no new test is needed.",
+      hint:"One word and a colon.", checks:ELSE},
+    {k:"line", d:1, code:"fare = distance + 12", alt:["fare = 12 + distance", "fare = distance * 1 + 12", "fare = 1 * distance + 12", "fare = (distance * 1) + 12", "fare = 12 + distance * 1"],
+      task:"Inside the <code>else</code>: work out <b>1 pound for every km, plus 12 pounds</b> and store it in <code>fare</code>.",
+      does:"1 pound per km is just the distance itself. Then add 12. For 25 km this stores 25 + 12 = 37.",
+      hint:"<code>fare = distance + 12</code>",
+      checks:[[/^print\b/, "Do not print here. Store the answer in <code>fare</code>."], [/distance\s*\*\s*12/, "It is 1 pound per km and then 12 pounds <b>added</b> on: <code>distance + 12</code>."], [/^distance\s*\+\s*12$/, "That works the answer out but does not store it. Start with <code>fare =</code>"]]},
+    {k:"line", d:0, code:`print("Fare:", fare, "pounds")`, alt:say("Fare:", "fare", "pounds").slice(1),
+      task:"<b>After</b> the branches (back at the left edge): print <code>Fare:</code>, then <code>fare</code>, then <code>pounds</code>.",
+      does:"This line has <b>no indent</b>, so it is not inside any branch and runs every time. Commas join the three parts with a space between each: <code>Fare: 18 pounds</code>.",
+      hint:"<code>print(\"Fare:\", fare, \"pounds\")</code>",
+      checks:[...spaceSlip("Fare:"), [/,\s*" pounds"/, "With commas, Python puts the space in for you. Take the space out: <code>\"pounds\"</code>."], [/\+\s*fare\b/, "<code>+</code> cannot join text to a number. Use commas: <code>\"Fare:\", fare, \"pounds\"</code>"], [/"fare"|"Fare:\s*fare/, "<code>fare</code> is a variable, so keep it outside the speech marks."], [/£/, "The tests want the word <code>pounds</code>, not a £ sign."], ...PRINT]}
+   ]}
+];
+
+const GROUPS = [
+  ["A", "Section A · Multiple choice", "1 mark each. The answer is given and explained. Read the explanation, then answer the new question underneath to show you understand."],
+  ["B", "Section B · Debug", "The lines in red boxes are the ones to change. Read why each one is wrong, then type the corrected line."],
+  ["C", "Section C · Write it", "Build the program one line at a time. Each box tells you what to type and what that line does."]
+];
+const ALL = [...MCQ.map(m => ({...m, sec:"A", mc:true})), ...TASKS];
+
+/* ============================================================ build page */
+const app = $("#app");
+function hl(src){
+  const out = []; const re = /(#.*$)|("(?:[^"\\]|\\.)*"?|'(?:[^'\\]|\\.)*'?)|([A-Za-z_][A-Za-z0-9_]*)|(\d+(?:\.\d+)?)|(\s+)|(.)/g; let m;
+  while ((m = re.exec(src))){
+    if (m[1]) out.push([m[1], "c"]);
+    else if (m[2]) out.push([m[2], "s"]);
+    else if (m[3]){ const w = m[3], after = src.slice(re.lastIndex).trimStart();
+      out.push([w, KW.has(w) ? "k" : after[0] === "(" ? "f" : ""]); }
+    else if (m[4]) out.push([m[4], "n"]);
+    else out.push([m[0], ""]);
+  }
+  return out.map(([t, kind]) => kind ? `<span class="${kind}">${esc(t)}</span>` : esc(t)).join("");
+}
+const codeBlock = (src, cls = "small") => src ? `<div class="code ${cls}">${src.split("\n").map(l => `<div class="cl"><span class="src">${l ? hl(l) : " "}</span></div>`).join("")}</div>` : "";
+const L = "ABCD";
+
+$("#chips").innerHTML = ALL.map(q => `<a class="chip" href="#${q.id}" data-chip="${q.id}">${q.id}</a>`).join("");
+
+function sectionShell(q, pills, body){
+  const sec = document.createElement("section");
+  sec.className = "act shut"; sec.id = q.id;
+  sec.innerHTML = `<header><span class="num">${q.id}</span><h2><button type="button" data-toggle="${q.id}" aria-expanded="false">${esc(q.title)}</button></h2>${pills}<span class="badge" id="badge-${q.id}"></span></header><div class="secbody">${body}</div>`;
+  app.appendChild(sec);
+  return sec;
+}
+
+GROUPS.forEach(([g, name, note]) => {
+  app.insertAdjacentHTML("beforeend", `<h2 class="group" data-g="${g}">${name}</h2><p class="groupnote" data-g="${g}">${note}</p>`);
+  if (g === "A") MCQ.forEach(q => {
+    const lab = i => q.numeric ? "" : `<b>${L[i]}</b>`;
+    const typed = q.numeric ? `print(${q.opts[q.ans]})` : `print("${L[q.ans]}")`;
+    sectionShell(q, `<span class="pill">1 MARK</span><span class="pill navy">${q.numeric ? "SHORT ANSWER" : "MULTIPLE CHOICE"}</span>`, `
+      <p class="qtext">${q.prompt}</p>
+      ${codeBlock(q.code)}
+      ${q.numeric ? "" : `<div class="opts">${q.opts.map((o, i) => `<div class="opt${i === q.ans ? " correct" : ""}"><b>${L[i]}</b><code>${esc(o)}</code>${i === q.ans ? " ✓" : ""}</div>`).join("")}</div>`}
+      <div class="answer"><p class="ans">The answer is ${q.numeric ? esc(q.opts[q.ans]) : `${L[q.ans]}: ${esc(q.opts[q.ans])}`}</p>${q.explain}<p class="enter">On CodeBash the line to type is <code>${esc(typed)}</code>${q.numeric ? " (a number, so no speech marks)." : " (a capital letter, inside speech marks)."}</p></div>
+      <div class="tryq"><h3>Now try this one</h3><p class="qtext">${q.alt.prompt} Use the explanation above to work it out, then click your answer.</p>
+        ${codeBlock(q.alt.code)}
+        <div class="opts">${q.alt.opts.map(([o], i) => `<button class="opt" type="button" data-mc="${q.id}" data-i="${i}">${lab(i)}<code>${esc(o)}</code></button>`).join("")}</div>
+        <div class="fb" id="mcfb-${q.id}" aria-live="polite"></div></div>`);
+  });
+  else TASKS.filter(T => T.sec === g).forEach(buildTask);
+});
+app.insertAdjacentHTML("beforeend", `<div class="status"><span>Your work is saved in this browser as you go.</span><button class="btn" type="button" data-pdf>Export to PDF</button><button class="btn ghost" type="button" id="reset">Clear my answers</button></div>`);
+
+function buildTask(T){
+  T.lines = T.rows.filter(r => r.k === "line");
+  T.lines.forEach((r, i) => { r.key = `${T.id}-${i}`; r.no = i + 1; });
+  const debug = T.type === "DEBUG";
+  const typesIndent = T.lines.some(r => r.indent);
+  const sec = sectionShell(T, `<span class="pill">${T.marks} MARKS</span><span class="pill ${debug ? "must" : T.type === "COMPLETE" ? "model" : "navy"}">${T.type}</span>`, `
+    <div class="twocol">
+      <div><div class="qtext">${T.q}</div><p class="howto" style="margin:0">${T.howto}</p></div>
+      <div class="eg">${T.egs.map((e, i) => `<h3>Example${T.egs.length > 1 ? " " + (i + 1) : ""}</h3><div class="console">${e.inp.map(x => `<span class="in">${esc(x)}</span>`).join("\n")}\n${esc(e.out)}</div>`).join("")}<p class="cap">Green is typed in. White is what the program prints.</p></div>
+    </div>
+    <div class="rules"><span>Type one line per box</span><span>Press Enter to check</span><span>${typesIndent ? "Here you type the 4 spaces yourself" : "The dots ···· are the indent: do not type it"}</span><span>Capital letters matter</span></div>
+    <div class="rows"></div>
+    <div class="prog">
+      <div class="proghead"><h3>${debug ? "The whole program" : "Your whole program"}</h3><div class="legend">${debug ? `<span><i style="color:#FF8A80">▌</i> still buggy</span>` : `<span><i style="color:var(--muted)">#</i> still to write</span>`}</div></div>
+      <div class="code" id="code-${T.id}" aria-live="polite"></div>
+      <div class="donebar" id="done-${T.id}"><p><strong>${debug ? "Program fixed." : "Program built."}</strong> Read it through once from top to bottom. Then copy it into CodeBash question <b>${T.id}</b>, run it and check every test passes.</p><button class="btn gold" type="button" data-copy="${T.id}">Copy code</button></div>
+    </div>`);
+  const box = $(".rows", sec);
+  T.rows.forEach(r => {
+    const div = document.createElement("div");
+    const pad = "····".repeat(r.d);
+    if (r.k === "given"){
+      div.className = "row given";
+      div.innerHTML = `<span class="ln" aria-hidden="true">✓</span><div class="main"><div class="givencode"><span class="indent" aria-hidden="true">${pad}</span>${esc(r.code)}</div></div>`;
+    } else {
+      div.className = "row" + (r.was ? " bug" : ""); div.id = "row-" + r.key;
+      div.innerHTML = `<span class="ln">${r.no}</span><div class="main">
+        ${r.was ? `<span class="buglabel">Change this line</span><div class="bugline">${esc("    ".repeat(r.wasD ?? 0) + r.was)}</div>` : ""}
+        ${r.why ? `<div class="why"><b>Why it is wrong:</b> ${r.why}</div>` : ""}
+        <div class="task">${r.task}</div>
+        ${r.does ? `<div class="does"><b>WHAT IT DOES</b>${r.does}</div>` : ""}
+        <div class="entry">${r.indent ? "" : `<span class="indent" aria-hidden="true">${pad}</span>`}<input type="text" id="in-${r.key}" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="${T.id} line ${r.no}" placeholder="${r.indent ? "4 spaces, then the line" : r.was ? "type the corrected line here" : `type line ${r.no} here`}">
+        <button class="btn" type="button" data-check="${r.key}">Check</button>
+        <button class="btn ghost" type="button" data-hint="${r.key}" ${r.hint ? "" : "hidden"}>Hint</button>
+        <button class="btn model" type="button" data-model="${r.key}">▶ Model</button></div>
+        <div class="hintbox" id="hint-${r.key}" hidden>${r.hint || ""}</div>
+        <div class="fb" id="fb-${r.key}" aria-live="polite"></div></div>`;
+    }
+    box.appendChild(div);
+  });
+}
+
+/* ============================================================ state + render */
+const findLine = key => { for (const T of TASKS) for (const r of T.lines) if (r.key === key) return [T, r]; };
+const isRight = r => !!S.ans[r.key] && check(r, S.ans[r.key]).ok;
+const taskDone = T => T.lines.every(isRight);
+const mcDone = q => S.mc[q.id] === q.alt.ans;
+const qDone = q => q.mc ? mcDone(q) : taskDone(q);
+
+/* assemble the full program: in Python the indent is the structure, so each row is padded by its depth */
+function assemble(T, cur){
+  const pad = d => "    ".repeat(d);
+  return T.rows.map(r => {
+    if (r.k === "given") return {txt: pad(r.d) + r.code};
+    if (isRight(r)) return {txt: pad(r.d) + matched(r, S.ans[r.key])};
+    if (r.was) return {txt: pad(r.wasD ?? r.d) + r.was, bug: true};
+    return {txt: pad(r.d) + `# line ${r.no}: ${plain(r.task)}`, ph: true, cur: T.lines.indexOf(r) === cur};
+  });
+}
+const plain = h => { const d = document.createElement("div"); d.innerHTML = h; let t = d.textContent.replace(/\s+/g, " ").trim(); return t.length > 70 ? t.slice(0, 67) + "…" : t; };
+function renderCode(T, cur){
+  $(`#code-${T.id}`).innerHTML = assemble(T, cur).map((l, i) =>
+    `<div class="cl${l.cur ? " cur" : ""}${l.bug ? " bugl" : ""}"><span class="g">${i + 1}</span><span class="src">${l.ph ? `<span class="ph">${esc(l.txt)}</span>` : hl(l.txt)}</span></div>`).join("");
+}
+const codeText = T => assemble(T, -1).map(l => l.txt).join("\n") + "\n";
+
+function renderTask(T){
+  let firstOpen = -1;
+  T.lines.forEach((r, i) => {
+    const row = $("#row-" + r.key), inp = $("#in-" + r.key), ok = isRight(r);
+    if (document.activeElement !== inp) inp.value = S.ans[r.key] || "";
+    const reachable = i === 0 || isRight(T.lines[i - 1]) || ok || !!r.was;   // bug fixes can be done in any order
+    if (!ok && firstOpen < 0 && reachable) firstOpen = i;
+    row.classList.toggle("waiting", !reachable);
+    inp.disabled = !reachable;
+    $(`[data-check="${r.key}"]`).disabled = !reachable;
+    row.classList.toggle("right", ok);
+    if (ok) row.classList.remove("wrong");
+  });
+  const done = taskDone(T), got = T.lines.filter(isRight).length, b = $("#badge-" + T.id);
+  const noun = T.type === "DEBUG" ? "fixes" : "lines";
+  b.textContent = done ? (T.type === "DEBUG" ? "✓ Program fixed" : "✓ Program built") : `${got} of ${T.lines.length} ${T.lines.length === 1 ? noun.slice(0, -2 + (noun === "lines")) : noun}`;
+  b.className = "badge" + (done ? " done" : "");
+  $("#done-" + T.id).classList.toggle("on", done);
+  renderCode(T, firstOpen);
+}
+function renderMc(q){
+  const pick = S.mc[q.id], done = pick === q.alt.ans, fb = $("#mcfb-" + q.id);
+  $$(`[data-mc="${q.id}"]`).forEach(b => {
+    const i = +b.dataset.i;
+    b.classList.toggle("correct", done && i === q.alt.ans);
+    b.classList.toggle("wrongpick", !done && pick === i);
+    b.disabled = done;
+  });
+  if (pick === undefined){ fb.textContent = ""; fb.className = "fb"; }
+  else { fb.textContent = (done ? "✓ Correct. " : "Not yet. ") + q.alt.opts[pick][1] + (done ? "" : " Try again."); fb.className = "fb " + (done ? "good" : "bad"); }
+  const b = $("#badge-" + q.id); b.textContent = done ? "✓ Corrected" : "Read, then try the new question"; b.className = "badge" + (done ? " done" : "");
+}
+function renderOverall(){
+  const n = ALL.filter(qDone).length;
+  ALL.forEach(q => $(`[data-chip="${q.id}"]`).classList.toggle("done", qDone(q)));
+  const o = $("#overall"); o.textContent = `${n} of ${ALL.length} corrected`; o.className = "badge" + (n === ALL.length ? " done" : "");
+}
+function renderAll(){ TASKS.forEach(renderTask); MCQ.forEach(renderMc); renderOverall(); }
+
+/* open / close question cards */
+function setOpen(id, open, remember = true){
+  const sec = document.getElementById(id); if (!sec) return;
+  sec.classList.toggle("shut", !open);
+  $(`[data-toggle="${id}"]`).setAttribute("aria-expanded", String(open));
+  if (remember){ S.open[id] = open; save(); }
+}
+ALL.forEach(q => setOpen(q.id, !!S.open[q.id], false));
+function openFromHash(){ const id = location.hash.slice(1); if (ALL.some(q => q.id === id)){ setOpen(id, true); document.getElementById(id).scrollIntoView({block:"start"}); } }
+addEventListener("hashchange", openFromHash);
+
+/* ============================================================ interaction */
+function doCheck(key, moveOn){
+  const [T, r] = findLine(key), inp = $("#in-" + key), fb = $("#fb-" + key), row = $("#row-" + key);
+  S.ans[key] = inp.value; save();
+  const res = check(r, inp.value);
+  fb.innerHTML = res.msg; fb.className = "fb " + (res.ok ? "good" : "bad");
+  row.classList.toggle("wrong", !res.ok); row.classList.toggle("right", res.ok);
+  if (!res.ok){ S.tries[key] = (S.tries[key] || 0) + 1; save(); if (S.tries[key] >= 3 && r.hint) $("#hint-" + key).hidden = false; }
+  renderTask(T); renderOverall();
+  if (res.ok && moveOn){
+    const nx = T.lines[T.lines.indexOf(r) + 1];
+    if (nx && !isRight(nx)) setTimeout(() => $("#in-" + nx.key).focus(), 60);
+  }
+}
+document.addEventListener("click", e => {
+  const t = e.target;
+  const chip = t.closest("[data-chip]"); if (chip){ setOpen(chip.dataset.chip, true); return; }
+  const tog = t.closest("[data-toggle]"); if (tog){ const id = tog.dataset.toggle; setOpen(id, document.getElementById(id).classList.contains("shut")); return; }
+  const all = t.closest("[data-all]"); if (all){ ALL.forEach(q => setOpen(q.id, all.dataset.all === "open")); return; }
+  const c = t.closest("[data-check]"); if (c){ doCheck(c.dataset.check, true); return; }
+  const h = t.closest("[data-hint]"); if (h){ const b = $("#hint-" + h.dataset.hint); b.hidden = !b.hidden; return; }
+  const m = t.closest("[data-model]"); if (m){ const [, r] = findLine(m.dataset.model); const inp = $("#in-" + r.key); inp.disabled = false; inp.value = (r.indent ? "    " : "") + r.code; doCheck(r.key, false); return; }
+  const mc = t.closest("[data-mc]"); if (mc){ const q = MCQ.find(x => x.id === mc.dataset.mc); S.mc[q.id] = +mc.dataset.i; save(); renderMc(q); renderOverall(); return; }
+  const cp = t.closest("[data-copy]"); if (cp){ copy(codeText(TASKS.find(x => x.id === cp.dataset.copy)), cp); return; }
+  if (t.id === "reset" && confirm("Clear every answer on this page and start again?")){ const keep = {who: S.who, cls: S.cls}; S = {ans:{}, tries:{}, mc:{}, open:{}, ...keep}; save(); $$(".fb").forEach(f => { f.textContent = ""; f.className = "fb"; }); $$(".row").forEach(r => r.classList.remove("wrong")); $$(".hintbox").forEach(h => h.hidden = true); ALL.forEach(q => setOpen(q.id, false, false)); renderAll(); scrollTo(0, 0); }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.id && e.target.id.startsWith("in-")){ e.preventDefault(); doCheck(e.target.id.slice(3), true); }
+});
+function copy(text, btn){
+  const done = () => { const o = btn.textContent; btn.textContent = "Copied ✓"; setTimeout(() => btn.textContent = o, 1500); };
+  const fallback = () => { const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} ta.remove(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+}
+/* ============================================================ export to PDF (browser print) */
+const started = q => q.mc ? S.mc[q.id] !== undefined : q.lines.some(r => (S.ans[r.key] || "").trim());
+const TITLE = document.title;
+function preparePrint(){
+  const shown = q => started(q) || !document.getElementById(q.id).classList.contains("shut");
+  const everything = TEACHER || !ALL.some(shown);
+  ALL.forEach(q => document.getElementById(q.id).classList.toggle("noprint", !(everything || shown(q))));
+  $$("[data-g]").forEach(el => el.classList.toggle("noprint", !ALL.some(q => q.sec === el.dataset.g && !document.getElementById(q.id).classList.contains("noprint"))));
+  $$(".entry input").forEach(inp => {
+    let pv = $(".printval", inp.parentElement);
+    if (!pv){ pv = document.createElement("div"); pv.className = "printval"; inp.after(pv); }
+    pv.textContent = inp.value || " ";
+  });
+  const when = new Date().toLocaleDateString("en-GB", {day:"numeric", month:"long", year:"numeric"});
+  $("#printmeta").textContent = `${ALL.filter(qDone).length} of ${ALL.length} questions corrected · ${when}`;
+  const who = [S.who, S.cls].filter(Boolean).join(" ").trim();
+  document.title = "Y7 Python Corrections" + (who ? " - " + who : "");      // becomes the PDF file name
+}
+addEventListener("beforeprint", preparePrint);
+addEventListener("afterprint", () => { document.title = TITLE; });
+document.addEventListener("click", e => { if (e.target.closest("[data-pdf]")){ preparePrint(); window.print(); } });
+
+for (const id of ["who", "cls"]){ const el = $("#" + id); el.value = S[id] || ""; el.addEventListener("input", () => { S[id] = el.value; save(); }); }
+
+renderAll();
+openFromHash();
+</script>
+</body>
+</html>
